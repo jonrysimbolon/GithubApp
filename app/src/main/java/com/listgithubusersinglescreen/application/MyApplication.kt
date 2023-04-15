@@ -1,4 +1,4 @@
-package com.listgithubusersinglescreen
+package com.listgithubusersinglescreen.application
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

@@ -1,7 +1,7 @@
-package com.listgithubusersinglescreen
+package com.listgithubusersinglescreen.data.remote.retrofit
 
-import com.githubuser.data.remote.response.User
-import com.githubuser.data.remote.response.UsersSearch
+import com.listgithubusersinglescreen.data.remote.response.User
+import com.listgithubusersinglescreen.data.remote.response.UsersSearch
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

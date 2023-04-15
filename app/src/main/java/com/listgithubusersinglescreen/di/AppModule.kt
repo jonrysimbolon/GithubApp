@@ -1,5 +1,7 @@
-package com.listgithubusersinglescreen
+package com.listgithubusersinglescreen.di
 
+import com.listgithubusersinglescreen.BuildConfig
+import com.listgithubusersinglescreen.data.remote.retrofit.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module

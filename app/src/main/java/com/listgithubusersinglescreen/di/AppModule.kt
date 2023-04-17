@@ -4,6 +4,8 @@ import androidx.room.Room
 import com.listgithubusersinglescreen.BuildConfig
 import com.listgithubusersinglescreen.data.local.room.UserDatabase
 import com.listgithubusersinglescreen.data.remote.retrofit.ApiService
+import com.listgithubusersinglescreen.repository.settings.PreferencesParent
+import com.listgithubusersinglescreen.repository.settings.SettingPreferences
 import com.listgithubusersinglescreen.repository.user.Repository
 import com.listgithubusersinglescreen.repository.user.UserRepository
 import okhttp3.OkHttpClient
@@ -42,6 +44,7 @@ val appModule = module {
     single {
         retrofit.create(ApiService::class.java)
     }
+
     single {
         Room.databaseBuilder(
             androidApplication(),
@@ -49,6 +52,11 @@ val appModule = module {
             "User.db"
         ).build()
     }
+
+    single<PreferencesParent> {
+        SettingPreferences(get())
+    }
+
     single<Repository> {
         UserRepository(get(), get())
     }

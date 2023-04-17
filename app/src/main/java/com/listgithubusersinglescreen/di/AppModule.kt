@@ -1,9 +1,14 @@
 package com.listgithubusersinglescreen.di
 
+import androidx.room.Room
 import com.listgithubusersinglescreen.BuildConfig
+import com.listgithubusersinglescreen.data.local.room.UserDatabase
 import com.listgithubusersinglescreen.data.remote.retrofit.ApiService
+import com.listgithubusersinglescreen.repository.user.Repository
+import com.listgithubusersinglescreen.repository.user.UserRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -32,25 +37,20 @@ private val retrofit = with(Retrofit.Builder()) {
     build()
 }
 
-/*
-val getApiService: ApiService by lazy {
-    retrofit.create(ApiService::class.java)
-}*/
-
 
 val appModule = module {
     single {
-        /*Retrofit.Builder()
-            .baseUrl("https://google.com")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(MyApi::class.java)*/
         retrofit.create(ApiService::class.java)
     }
-    /*single<MainRepository> {
-        MainRepositoryImpl(get())
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            UserDatabase::class.java,
+            "User.db"
+        ).build()
     }
-    viewModel {
-        MainViewModel(get())
-    }*/
+    single<Repository> {
+        UserRepository(get(), get())
+    }
+
 }

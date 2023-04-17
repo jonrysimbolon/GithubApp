@@ -6,6 +6,12 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.newDataInputStream())
+}
+
 android {
     namespace 'com.listgithubusersinglescreen'
     compileSdk 33
@@ -19,7 +25,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "KEY", '"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"')
+        buildConfigField("String", "KEY", localProperties['KEY'])
     }
 
     buildTypes {
@@ -51,6 +57,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

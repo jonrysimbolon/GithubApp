@@ -11,14 +11,15 @@
         android:theme="@style/Theme.ListGithubUserSingleScreen"
         tools:targetApi="31">
         <activity
-            android:name=".application.MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.ListGithubUserSingleScreen.NoActionBar">
+            android:name=".ui.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <nav-graph android:value="@navigation/main_navigation"/>
         </activity>
     </application>
 

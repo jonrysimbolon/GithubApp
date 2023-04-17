@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GL-User-Single-Screen</string>
+    <string name="app_name">GLUSS</string>
     <string name="tab_layout">Tab layout</string>
 
     <string name="hello_list_user_fragment">Hello list user fragment</string>

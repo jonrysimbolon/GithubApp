@@ -1,7 +1,7 @@
 package com.listgithubusersinglescreen.repository.user
 
 import androidx.lifecycle.LiveData
-import com.listgithubusersinglescreen.data.ResultStatus
+import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 
 interface Repository {

@@ -15,17 +15,18 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.listgithubusersinglescreen.R
-import com.listgithubusersinglescreen.data.ResultStatus
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.databinding.FragmentHomeBinding
+import com.listgithubusersinglescreen.helper.ResultStatus
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: HomeViewModel by sharedViewModel()
 
     override fun onCreateView(
@@ -39,33 +40,19 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupMenu()
-    }
-    private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-            override fun onPrepareMenu(menu: Menu) {
-                // Handle for example visibility of menu items
-            }
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main_menu, menu)
-                searchView(menu)
-            }
+        val layoutManager = LinearLayoutManager(requireActivity())
+        binding.rvUsers.layoutManager = layoutManager
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when (menuItem.itemId) {
-                    R.id.love -> {
-                        Toast.makeText(requireActivity(), "love list", Toast.LENGTH_SHORT).show()
-                        return true
-                    }
-                    R.id.setting -> {
-                        Toast.makeText(requireActivity(), "setting list", Toast.LENGTH_SHORT).show()
-                        return true
-                    }
-                }
-                return true
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        observeFreshUser(viewModel)
+
+        binding.srlMain.setOnRefreshListener {
+            observeFreshUser(viewModel)
+        }
+
+        binding.reloadBtn.setOnClickListener {
+            observeFreshUser(viewModel)
+        }
     }
 
     private fun showFailedComponent(isFailure: Boolean) {
@@ -106,6 +93,32 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun observeFreshUser(viewModel: HomeViewModel) {
+        viewModel.getFreshUser().observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is ResultStatus.Loading -> {
+                        showLoading(true)
+                        showFailedComponent(false)
+                    }
+                    is ResultStatus.Success -> {
+                        showLoading(false)
+                        showFailedComponent(false)
+                        val userData = result.data
+                        setUsersData(userData)
+                    }
+                    is ResultStatus.Error -> {
+                        showLoading(false)
+                        showFailedComponent(true)
+                        Toast.makeText(
+                            requireActivity(), getString(R.string.failed_desc) + result.error, Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
+
     private fun observeSearchUser(viewModel: HomeViewModel, query: String) {
         viewModel.getSearchUser(query).observe(this) { result ->
             if (result != null) {
@@ -124,7 +137,7 @@ class HomeFragment : Fragment() {
                         showLoading(false)
                         showFailedComponent(true)
                         Toast.makeText(
-                            requireActivity(), "Terjadi kesalahan" + result.error, Toast.LENGTH_SHORT
+                            requireActivity(), getString(R.string.failed_desc) + result.error, Toast.LENGTH_SHORT
                         ).show()
                     }
                 }

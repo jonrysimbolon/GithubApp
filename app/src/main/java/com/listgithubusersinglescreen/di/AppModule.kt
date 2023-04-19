@@ -13,6 +13,7 @@ import com.listgithubusersinglescreen.repository.settings.SettingPreferences
 import com.listgithubusersinglescreen.repository.user.Repository
 import com.listgithubusersinglescreen.repository.user.UserRepository
 import com.listgithubusersinglescreen.ui.home.HomeViewModel
+import com.listgithubusersinglescreen.ui.main.MainViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -20,6 +21,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = BuildConfig.SETTINGS_PREF)
 
 private val loggingInterceptor = with(HttpLoggingInterceptor()) {
     if (BuildConfig.DEBUG) {
@@ -47,8 +50,6 @@ private val retrofit = with(Retrofit.Builder()) {
     build()
 }
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 val appModule = module {
 
     single {
@@ -59,7 +60,7 @@ val appModule = module {
         Room.databaseBuilder(
             androidContext(),
             UserDatabase::class.java,
-            "User.db"
+            BuildConfig.USER_DB
         ).build()
     }
 
@@ -80,7 +81,11 @@ val appModule = module {
     }
 
     viewModel {
-        HomeViewModel(get(), get())
+        HomeViewModel(get())
+    }
+
+    viewModel {
+        MainViewModel(get())
     }
 
 }

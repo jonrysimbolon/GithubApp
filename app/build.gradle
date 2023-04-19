@@ -26,6 +26,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "KEY", localProperties['KEY'])
+
+        buildConfigField("String", "USER_DB", '"User.db"')
+        buildConfigField("String", "SETTINGS_PREF", '"settings"')
+        buildConfigField("String", "THEME_SETTINGS", '"theme_setting"')
     }
 
     buildTypes {
@@ -58,6 +62,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

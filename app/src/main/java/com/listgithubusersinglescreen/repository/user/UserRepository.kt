@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import com.listgithubusersinglescreen.data.ResultStatus
+import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.data.local.room.UserDao
 import com.listgithubusersinglescreen.data.remote.retrofit.ApiService

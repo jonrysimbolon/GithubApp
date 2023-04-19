@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.listgithubusersinglescreen.ui.splash.SplashFragment"
-        android:label="fragment_splash"
+        android:label="Splash"
         tools:layout="@layout/fragment_splash" >
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.listgithubusersinglescreen.ui.home.HomeFragment"
-        android:label="fragment_home"
+        android:label="Home"
         tools:layout="@layout/fragment_home">
 
         <action
@@ -39,5 +39,5 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.listgithubusersinglescreen.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="Settings" />
 </navigation>

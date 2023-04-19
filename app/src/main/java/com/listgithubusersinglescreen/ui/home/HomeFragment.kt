@@ -41,6 +41,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.ap.setOnClickListener {
+            it.findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+        }
+
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvUsers.layoutManager = layoutManager
 

@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface PreferencesParent {
     fun getThemeSetting(): Flow<ListTheme>
     suspend fun saveThemeSetting(isDarkModeActive: ListTheme)
+    suspend fun saveNotUseThemeSetting(isNotSystem: Boolean)
 }

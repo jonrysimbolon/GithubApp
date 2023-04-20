@@ -14,6 +14,7 @@ import com.listgithubusersinglescreen.repository.user.Repository
 import com.listgithubusersinglescreen.repository.user.UserRepository
 import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import com.listgithubusersinglescreen.ui.main.MainViewModel
+import com.listgithubusersinglescreen.ui.settings.SettingsViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -86,6 +87,10 @@ val appModule = module {
 
     viewModel {
         MainViewModel(get())
+    }
+
+    viewModel {
+        SettingsViewModel(get())
     }
 
 }

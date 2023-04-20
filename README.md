@@ -13,6 +13,8 @@
 :. use remote (retrofit)
 
 
+# TASK !!!
+
 [] Retain change rotation on searchview
 
 [] Adapter click to detail with mobile navigation (fragment)

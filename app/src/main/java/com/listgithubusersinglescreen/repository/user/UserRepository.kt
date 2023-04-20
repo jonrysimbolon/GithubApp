@@ -42,33 +42,18 @@ class UserRepository constructor(
             val userExist = localDataSource.isUserExist(nodeId)
             val userExistWithLoved = localDataSource.isUserExistWithLoved(nodeId)
             if (userExist) {
-                if(userExistWithLoved){
-                    localDataSource.updateUser(
-                        UserEntity(
-                            user.nodeId,
-                            user.login ?: "",
-                            user.followers ?: 0,
-                            user.avatarUrl ?: "",
-                            user.following ?: 0,
-                            user.name ?: "",
-                            user.url ?: "",
-                            true
-                        )
+                localDataSource.updateUser(
+                    UserEntity(
+                        user.nodeId,
+                        user.login ?: "",
+                        user.followers ?: 0,
+                        user.avatarUrl ?: "",
+                        user.following ?: 0,
+                        user.name ?: "",
+                        user.url ?: "",
+                        userExistWithLoved
                     )
-                }else {
-                    localDataSource.updateUser(
-                        UserEntity(
-                            user.nodeId,
-                            user.login ?: "",
-                            user.followers ?: 0,
-                            user.avatarUrl ?: "",
-                            user.following ?: 0,
-                            user.name ?: "",
-                            user.url ?: "",
-                            false
-                        )
-                    )
-                }
+                )
             } else {
                 localDataSource.insertUser(
                     UserEntity(

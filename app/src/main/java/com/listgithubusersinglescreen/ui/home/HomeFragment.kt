@@ -1,26 +1,17 @@
 package com.listgithubusersinglescreen.ui.home
 
-import android.app.SearchManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.getSystemService
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.databinding.FragmentHomeBinding
 import com.listgithubusersinglescreen.helper.ResultStatus
+import com.listgithubusersinglescreen.ui.adapter.MainAdapter
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -40,10 +31,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.ap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
-        }
 
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvUsers.layoutManager = layoutManager
@@ -94,7 +81,15 @@ class HomeFragment : Fragment() {
         for (user in users) {
             usersData.add(user)
         }
-
+        val adapter = MainAdapter{ user ->
+            /*val intent = Intent(this@MainActivity, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.USER_NODE_ID, user.nodeId)
+            intent.putExtra(DetailActivity.USER_LOGIN, user.login)
+            startActivity(intent)*/
+        }.also {
+            it.setListUsers(usersData)
+        }
+        binding.rvUsers.adapter = adapter
     }
 
     private fun observeFreshUser(viewModel: HomeViewModel) {
@@ -105,17 +100,21 @@ class HomeFragment : Fragment() {
                         showLoading(true)
                         showFailedComponent(false)
                     }
+
                     is ResultStatus.Success -> {
                         showLoading(false)
                         showFailedComponent(false)
                         val userData = result.data
                         setUsersData(userData)
                     }
+
                     is ResultStatus.Error -> {
                         showLoading(false)
                         showFailedComponent(true)
                         Toast.makeText(
-                            requireActivity(), getString(R.string.failed_desc) + result.error, Toast.LENGTH_SHORT
+                            requireActivity(),
+                            getString(R.string.failed_desc) + result.error,
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -123,50 +122,33 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun observeSearchUser(viewModel: HomeViewModel, query: String) {
-        viewModel.getSearchUser(query).observe(this) { result ->
+    fun observeSearchUser(viewModel: HomeViewModel) {
+        viewModel.getSearchUser(viewModel.searchText.value ?: "").observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
                     is ResultStatus.Loading -> {
                         showLoading(true)
                         showFailedComponent(false)
                     }
+
                     is ResultStatus.Success -> {
                         showLoading(false)
                         showFailedComponent(false)
                         val userData = result.data
                         setUsersData(userData)
                     }
+
                     is ResultStatus.Error -> {
                         showLoading(false)
                         showFailedComponent(true)
                         Toast.makeText(
-                            requireActivity(), getString(R.string.failed_desc) + result.error, Toast.LENGTH_SHORT
+                            requireActivity(),
+                            getString(R.string.failed_desc) + result.error,
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             }
-        }
-    }
-
-    private fun searchView(menu: Menu) {
-        val searchManager = requireActivity().getSystemService<SearchManager>()
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
-
-        searchView.apply {
-            setSearchableInfo(searchManager?.getSearchableInfo(requireActivity().componentName))
-            queryHint = resources.getString(R.string.search_hint)
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    observeSearchUser(viewModel, query!!)
-                    searchView.clearFocus()
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
         }
     }
 

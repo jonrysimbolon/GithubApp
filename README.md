@@ -12,8 +12,12 @@
 
 :. use remote (retrofit)
 
+# Rule
 
-# TASK !!!
+:. handle menu on each fragment not in activity (advice from chatgpt)
+
+
+# TASK
 
 [] Retain change rotation on searchview
 

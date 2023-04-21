@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.data.local.entity.UserEntity

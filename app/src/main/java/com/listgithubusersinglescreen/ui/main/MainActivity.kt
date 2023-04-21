@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun configActionBar() {
         navHostFragment.findNavController().addOnDestinationChangedListener{ _, destination, _ ->
+            title = destination.label
             if(destination.id == R.id.splashFragment){
                 supportActionBar?.hide()
             }else{

@@ -1,15 +1,10 @@
 package com.listgithubusersinglescreen.ui.home
 
-import android.app.SearchManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.listgithubusersinglescreen.R
@@ -24,12 +19,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by sharedViewModel()
-
-    private var _searchMenuItem: MenuItem? = null
-    private val searchMenuItem get() = _searchMenuItem
-
-    private var _searchView: SearchView? = null
-    private val searchView get() = _searchView!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,30 +45,6 @@ class HomeFragment : Fragment() {
             observeFreshUser(viewModel)
         }
     }
-
-    /*private fun searchView(menu: Menu) {
-        val searchManager = getSystemService<SearchManager>()
-        _searchMenuItem = menu.findItem(R.id.search)
-        _searchView = searchMenuItem?.actionView as SearchView
-        searchView.apply {
-            setIconifiedByDefault(false)
-            setSearchableInfo(searchManager?.getSearchableInfo(componentName))
-            queryHint = resources.getString(R.string.search_hint)
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    searchView.clearFocus()
-
-                    (navHostFragment.childFragmentManager.fragments[0] as HomeFragment)
-                        .observeSearchUser(homeViewModel)
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
-        }
-    }*/
 
     private fun showFailedComponent(isFailure: Boolean) {
         binding.apply {
@@ -158,7 +123,7 @@ class HomeFragment : Fragment() {
     }
 
     fun observeSearchUser(viewModel: HomeViewModel) {
-        viewModel.getSearchUser(viewModel.searchQuery.value ?: "").observe(viewLifecycleOwner) { result ->
+        viewModel.getSearchUser(viewModel.searchText.value ?: "").observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
                     is ResultStatus.Loading -> {
@@ -190,12 +155,5 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        _searchView = null
-        _searchMenuItem = null
-    }
-
-    companion object{
-        val KEY_SEARCH_VIEW_IS_EXPANDED = "key_search_view_is_expanded"
-        val KEY_SEARCH_VIEW_QUERY = "key_search_view_query"
     }
 }

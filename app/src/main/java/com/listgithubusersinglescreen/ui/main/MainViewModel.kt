@@ -12,9 +12,4 @@ class MainViewModel(
     private val pref: PreferencesParent
 ): ViewModel() {
     fun getThemeSettings(): LiveData<ListTheme> = pref.getThemeSetting().asLiveData()
-
-    fun clearAndSetTitle(it: MaterialToolbar, destination: NavDestination) {
-        it.menu.clear()
-        it.title = destination.label
-    }
 }

@@ -44,6 +44,14 @@ class HomeFragment : Fragment() {
         binding.reloadBtn.setOnClickListener {
             observeFreshUser(viewModel)
         }
+
+        viewModel.searchText.observe(requireActivity()) { text ->
+            viewModel.searchView.value?.apply {
+                setQuery(text, false)
+                setIconifiedByDefault(false)
+                isIconified = false
+            }
+        }
     }
 
     private fun showFailedComponent(isFailure: Boolean) {
@@ -81,7 +89,7 @@ class HomeFragment : Fragment() {
         for (user in users) {
             usersData.add(user)
         }
-        val adapter = MainAdapter{ user ->
+        val adapter = MainAdapter { user ->
             /*val intent = Intent(this@MainActivity, DetailActivity::class.java)
             intent.putExtra(DetailActivity.USER_NODE_ID, user.nodeId)
             intent.putExtra(DetailActivity.USER_LOGIN, user.login)
@@ -123,33 +131,34 @@ class HomeFragment : Fragment() {
     }
 
     fun observeSearchUser(viewModel: HomeViewModel) {
-        viewModel.getSearchUser(viewModel.searchText.value ?: "").observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultStatus.Loading -> {
-                        showLoading(true)
-                        showFailedComponent(false)
-                    }
+        viewModel.getSearchUser(viewModel.searchText.value ?: "")
+            .observe(viewLifecycleOwner) { result ->
+                if (result != null) {
+                    when (result) {
+                        is ResultStatus.Loading -> {
+                            showLoading(true)
+                            showFailedComponent(false)
+                        }
 
-                    is ResultStatus.Success -> {
-                        showLoading(false)
-                        showFailedComponent(false)
-                        val userData = result.data
-                        setUsersData(userData)
-                    }
+                        is ResultStatus.Success -> {
+                            showLoading(false)
+                            showFailedComponent(false)
+                            val userData = result.data
+                            setUsersData(userData)
+                        }
 
-                    is ResultStatus.Error -> {
-                        showLoading(false)
-                        showFailedComponent(true)
-                        Toast.makeText(
-                            requireActivity(),
-                            getString(R.string.failed_desc) + result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        is ResultStatus.Error -> {
+                            showLoading(false)
+                            showFailedComponent(true)
+                            Toast.makeText(
+                                requireActivity(),
+                                getString(R.string.failed_desc) + result.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
-        }
     }
 
     override fun onDestroyView() {

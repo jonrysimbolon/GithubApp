@@ -6,7 +6,8 @@
         android:icon="@drawable/ic_search_white_24"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="collapseActionView|ifRoom" />
+        app:showAsAction="collapseActionView|ifRoom"
+        app:iconifiedByDefault="false"/>
     <item
         android:id="@+id/love"
         android:icon="@drawable/ic_love_active_white_24"

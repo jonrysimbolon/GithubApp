@@ -117,23 +117,23 @@ class MainActivity : AppCompatActivity() {
         val searchView = menu.findItem(R.id.search).actionView as SearchView
 
         searchView.apply {
-            homeViewModel.searchText.observe(this@MainActivity) { text ->
-                searchView.setQuery(text, false)
-            }
-
+            setIconifiedByDefault(false)
             setSearchableInfo(searchManager?.getSearchableInfo(componentName))
             queryHint = resources.getString(R.string.search_hint)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
+                override fun onQueryTextSubmit(query: String): Boolean {
                     searchView.clearFocus()
-                    homeViewModel.setSearchText(query!!)
+                    homeViewModel.setSearchView(searchView)
+                    homeViewModel.setSearchText(query)
                     (navHostFragment.childFragmentManager.fragments[0] as HomeFragment)
                         .observeSearchUser(homeViewModel)
                     return true
                 }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
+                override fun onQueryTextChange(newText: String): Boolean {
+                    homeViewModel.setSearchView(searchView)
+                    homeViewModel.setSearchText(newText)
+                    return true
                 }
             })
         }

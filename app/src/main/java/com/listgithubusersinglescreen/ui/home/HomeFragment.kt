@@ -1,15 +1,17 @@
 package com.listgithubusersinglescreen.ui.home
 
 import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.getSystemService
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,40 +49,31 @@ class HomeFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvUsers.layoutManager = layoutManager
 
-        observeFreshUser(viewModel)
+        setupMenu()
+
+        observeFreshUser()
 
         binding.srlMain.setOnRefreshListener {
-            observeFreshUser(viewModel)
+            observeFreshUser()
         }
 
         binding.reloadBtn.setOnClickListener {
-            observeFreshUser(viewModel)
+            observeFreshUser()
         }
+
+        viewModel.searchText.observe(viewLifecycleOwner) { text ->
+
+            // submit
+            // :. false -> save state but not submit auto
+            // :. true -> save state and submit auto
+            viewModel.searchView.value?.apply {
+                setQuery(text, false)
+                setIconifiedByDefault(false)
+                isIconified = false
+            }
+        }
+
     }
-
-    /*private fun searchView(menu: Menu) {
-        val searchManager = getSystemService<SearchManager>()
-        _searchMenuItem = menu.findItem(R.id.search)
-        _searchView = searchMenuItem?.actionView as SearchView
-        searchView.apply {
-            setIconifiedByDefault(false)
-            setSearchableInfo(searchManager?.getSearchableInfo(componentName))
-            queryHint = resources.getString(R.string.search_hint)
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    searchView.clearFocus()
-
-                    (navHostFragment.childFragmentManager.fragments[0] as HomeFragment)
-                        .observeSearchUser(homeViewModel)
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
-            })
-        }
-    }*/
 
     private fun showFailedComponent(isFailure: Boolean) {
         binding.apply {
@@ -118,17 +111,14 @@ class HomeFragment : Fragment() {
             usersData.add(user)
         }
         val adapter = MainAdapter{ user ->
-            /*val intent = Intent(this@MainActivity, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.USER_NODE_ID, user.nodeId)
-            intent.putExtra(DetailActivity.USER_LOGIN, user.login)
-            startActivity(intent)*/
+
         }.also {
             it.setListUsers(usersData)
         }
         binding.rvUsers.adapter = adapter
     }
 
-    private fun observeFreshUser(viewModel: HomeViewModel) {
+    private fun observeFreshUser() {
         viewModel.getFreshUser().observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
@@ -158,8 +148,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun observeSearchUser(viewModel: HomeViewModel) {
-        viewModel.getSearchUser(viewModel.searchQuery.value ?: "").observe(viewLifecycleOwner) { result ->
+    private fun observeSearchUser(text: String) {
+        viewModel.getSearchUser(text).observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 when (result) {
                     is ResultStatus.Loading -> {
@@ -195,8 +185,57 @@ class HomeFragment : Fragment() {
         _searchMenuItem = null
     }
 
-    companion object{
-        val KEY_SEARCH_VIEW_IS_EXPANDED = "key_search_view_is_expanded"
-        val KEY_SEARCH_VIEW_QUERY = "key_search_view_query"
+    private fun searchView(menu: Menu) {
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        _searchMenuItem = menu.findItem(R.id.search)
+        _searchView = searchMenuItem?.actionView as SearchView
+        searchView.apply {
+            setIconifiedByDefault(false)
+            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+            queryHint = resources.getString(R.string.search_hint)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    searchView.clearFocus()
+                    observeSearchUser(query)
+                    viewModel.searchText.value = query
+                    viewModel.searchView.value = _searchView
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.searchText.value = newText
+                    viewModel.searchView.value = _searchView
+                    return true
+                }
+            })
+        }
     }
+
+    private fun setupMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_menu, menu)
+                searchView(menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.love -> {
+                        Toast.makeText(requireActivity(), "love list", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+
+                    R.id.setting -> {
+                        findNavController()
+                            .navigate(R.id.action_homeFragment_to_settingsFragment)
+                        true
+                    }
+
+                    else -> true
+                }
+            }
+        }, viewLifecycleOwner)
+    }
+
 }

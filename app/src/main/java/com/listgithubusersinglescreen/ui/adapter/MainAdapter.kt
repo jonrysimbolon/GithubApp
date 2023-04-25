@@ -11,8 +11,8 @@ import com.listgithubusersinglescreen.databinding.ActivityMainAdapterBinding
 
 class MainAdapter(
     private val isFav: Boolean ? = null,
-    private val onClickLove: ((UserEntity) -> Unit)? = null,
-    private val onClickItem: ((UserEntity) -> Unit)? = null
+    private val onClickLove: ((View, UserEntity) -> Unit)? = null,
+    private val onClickItem: ((View, UserEntity) -> Unit)? = null
 ) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
     private val users = ArrayList<UserEntity>()
@@ -51,13 +51,13 @@ class MainAdapter(
 
         holder.itemView.setOnClickListener {
             onClickItem?.let { userEntityUnit ->
-                userEntityUnit(users[position])
+                userEntityUnit(it, users[position])
             }
         }
 
         holder.binding.loveBtn.setOnClickListener {
             onClickLove?.let { userEntityUnit ->
-                userEntityUnit(users[position])
+                userEntityUnit(it, users[position])
             }
         }
     }

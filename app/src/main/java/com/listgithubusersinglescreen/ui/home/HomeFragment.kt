@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
@@ -89,11 +90,11 @@ class HomeFragment : Fragment() {
         for (user in users) {
             usersData.add(user)
         }
-        val adapter = MainAdapter { user ->
-            /*val intent = Intent(this@MainActivity, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.USER_NODE_ID, user.nodeId)
-            intent.putExtra(DetailActivity.USER_LOGIN, user.login)
-            startActivity(intent)*/
+        val adapter = MainAdapter { view, user ->
+            val toDetailFragment = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
+            toDetailFragment.userNodeId = user.nodeId
+            toDetailFragment.userLogin = user.login
+            view.findNavController().navigate(toDetailFragment)
         }.also {
             it.setListUsers(usersData)
         }

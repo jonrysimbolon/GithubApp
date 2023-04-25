@@ -19,5 +19,12 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val bundle = DetailFragmentArgs.fromBundle(arguments as Bundle)
+        val userNodeId = bundle.userNodeId
+        val userLogin = bundle.userLogin
+
+        println("userNodeId: $userNodeId")
+        println("userLogin: $userLogin")
+
     }
 }

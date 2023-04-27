@@ -30,7 +30,7 @@ android {
         buildConfigField("String", "USER_DB", '"User.db"')
 
         buildConfigField("String", "USER_TBL_OLD", '"user_tbl"')
-        buildConfigField("String", "USER_TBL_NEW", '"user_tbl"')
+        buildConfigField("String", "USER_TBL_NEW", '"user_01_tbl"')
 
         buildConfigField("String", "FOLLOW_TBL_OLD", '""')
         buildConfigField("String", "FOLLOW_TBL_NEW", '"follow_tbl"')

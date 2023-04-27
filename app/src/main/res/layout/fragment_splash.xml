@@ -4,20 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
+    android:background="@drawable/bg_gradient"
     tools:context=".ui.splash.SplashFragment">
-
-
     <ImageView
         android:id="@+id/splashImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@null"
-        android:src="@drawable/logo"
-        app:layout_constraintDimensionRatio="4:1"
+        android:src="@mipmap/ic_launcher_round"
+        app:layout_constraintDimensionRatio="3:1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

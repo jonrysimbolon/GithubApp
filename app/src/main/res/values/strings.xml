@@ -7,8 +7,6 @@
     <string name="hello_detail_fragment">Hello detail user fragment</string>
 
     <string name="tab_detail_user">detail</string>
-    <string name="tab_list_follower">follower</string>
-    <string name="tab_list_following">following</string>
     <string name="search">Search</string>
     <string name="menu_1">About</string>
     <string name="search_hint">Github user name</string>

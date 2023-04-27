@@ -28,6 +28,13 @@ android {
         buildConfigField("String", "KEY", localProperties['KEY'])
 
         buildConfigField("String", "USER_DB", '"User.db"')
+
+        buildConfigField("String", "USER_TBL_OLD", '"user_tbl"')
+        buildConfigField("String", "USER_TBL_NEW", '"user_tbl"')
+
+        buildConfigField("String", "FOLLOW_TBL_OLD", '""')
+        buildConfigField("String", "FOLLOW_TBL_NEW", '"follow_tbl"')
+
         buildConfigField("String", "SETTINGS_PREF", '"settings"')
         buildConfigField("String", "THEME_SETTINGS", '"theme_setting"')
         buildConfigField("String", "NOT_USE_SYSTEM", '"not_use_system"')
@@ -86,8 +93,8 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
 
 
-    implementation 'androidx.activity:activity-ktx:1.7.0'
-    implementation 'androidx.fragment:fragment-ktx:1.5.6'
+    implementation 'androidx.activity:activity-ktx:1.7.1'
+    implementation 'androidx.fragment:fragment-ktx:1.5.7'
 
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

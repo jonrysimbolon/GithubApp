@@ -3,8 +3,9 @@ package com.listgithubusersinglescreen.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.listgithubusersinglescreen.BuildConfig
 
-@Entity(tableName = "user")
+@Entity(tableName = BuildConfig.USER_TBL_NEW)
 class UserEntity(
     @field:ColumnInfo(name = "nodeId")
     @field:PrimaryKey

@@ -4,10 +4,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.listgithubusersinglescreen.repository.user.Repository
+import com.listgithubusersinglescreen.repository.user.UserRepository
 
 class HomeViewModel(
-    private val userRepository: Repository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _searchText = MutableLiveData<String>()

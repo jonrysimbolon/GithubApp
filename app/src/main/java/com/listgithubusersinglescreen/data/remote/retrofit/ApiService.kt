@@ -2,7 +2,6 @@ package com.listgithubusersinglescreen.data.remote.retrofit
 
 import com.listgithubusersinglescreen.data.remote.response.User
 import com.listgithubusersinglescreen.data.remote.response.UsersSearch
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -14,10 +13,10 @@ interface ApiService {
     suspend fun getUsers(): List<User>
 
     @GET("users/{user}/following")
-    fun getFollowingUsers(@Path("user") user: String): Call<List<User>>
+    suspend fun getFollowingUsers(@Path("user") user: String): List<User>
 
     @GET("users/{user}/followers")
-    fun getFollowersUsers(@Path("user") user: String): Call<List<User>>
+    suspend fun getFollowersUsers(@Path("user") user: String): List<User>
 
     @GET("users/{user}")
     suspend fun getUser(@Path("user") user: String): User

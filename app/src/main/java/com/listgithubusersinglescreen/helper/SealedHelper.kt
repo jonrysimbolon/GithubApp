@@ -11,3 +11,7 @@ sealed class ResultStatus<out R> private constructor(){
     data class Error(val error: String): ResultStatus<Nothing>()
     object Loading: ResultStatus<Nothing>()
 }
+
+enum class FollowType {
+    Follower, Following
+}

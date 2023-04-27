@@ -51,7 +51,7 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.listgithubusersinglescreen.ui.detail.DetailFragment"
-        android:label="fragment_detail"
+        android:label="Detail"
         tools:layout="@layout/fragment_detail" >
         <action
             android:id="@+id/action_detailFragment_to_settingsFragment"

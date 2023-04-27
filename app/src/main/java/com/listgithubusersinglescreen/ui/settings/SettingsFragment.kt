@@ -2,11 +2,17 @@ package com.listgithubusersinglescreen.ui.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import androidx.core.view.MenuProvider
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.listgithubusersinglescreen.BuildConfig
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.helper.ListTheme
+import com.listgithubusersinglescreen.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SettingsFragment : PreferenceFragmentCompat(),
@@ -15,6 +21,24 @@ class SettingsFragment : PreferenceFragmentCompat(),
     private val viewModel: SettingsViewModel by sharedViewModel()
     private lateinit var notUseSystemPreference: SwitchPreferenceCompat
     private lateinit var themeSettingPreference: SwitchPreferenceCompat
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {}
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        (requireActivity() as MainActivity).onBack()
+                        true
+                    }
+                    else -> true
+                }
+            }
+        }, viewLifecycleOwner)
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)

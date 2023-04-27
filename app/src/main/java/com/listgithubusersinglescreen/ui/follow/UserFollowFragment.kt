@@ -62,7 +62,7 @@ class UserFollowFragment : Fragment() {
                         showLoading(false)
                         showFailedComponent(true)
                         Toast.makeText(
-                            requireActivity(), getString(R.string.terjadi_kesalahan) + result.error, Toast.LENGTH_SHORT
+                            requireActivity(), getString(R.string.failed_desc) + result.error, Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -88,7 +88,7 @@ class UserFollowFragment : Fragment() {
                         showLoading(false)
                         showFailedComponent(true)
                         Toast.makeText(
-                            requireActivity(), getString(R.string.terjadi_kesalahan) + result.error, Toast.LENGTH_SHORT
+                            requireActivity(), getString(R.string.failed_desc) + result.error, Toast.LENGTH_SHORT
                         ).show()
                     }
                 }

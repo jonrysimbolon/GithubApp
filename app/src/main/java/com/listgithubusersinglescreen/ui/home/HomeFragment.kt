@@ -1,18 +1,27 @@
 package com.listgithubusersinglescreen.ui.home
 
+import android.app.SearchManager
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.getSystemService
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.databinding.FragmentHomeBinding
 import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.ui.adapter.MainAdapter
+import com.listgithubusersinglescreen.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -37,6 +46,24 @@ class HomeFragment : Fragment() {
         binding.rvUsers.layoutManager = layoutManager
 
         observeFreshUser(viewModel)
+        requireActivity().addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_menu, menu)
+                searchView(menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.setting -> {
+                        findNavController()
+                            .navigate(R.id.action_homeFragment_to_settingsFragment)
+                        true
+                    }
+                    else -> true
+                }
+            }
+        }, viewLifecycleOwner)
 
         binding.srlMain.setOnRefreshListener {
             observeFreshUser(viewModel)
@@ -59,6 +86,32 @@ class HomeFragment : Fragment() {
         binding.apply {
             errorImg.visibility = if (isFailure) View.VISIBLE else View.GONE
             reloadBtn.visibility = if (isFailure) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun searchView(menu: Menu) {
+        val searchManager = requireActivity().getSystemService<SearchManager>()
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.apply {
+            setIconifiedByDefault(false)
+            setSearchableInfo(searchManager?.getSearchableInfo(requireActivity().componentName))
+            queryHint = resources.getString(R.string.search_hint)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    searchView.clearFocus()
+                    viewModel.setSearchView(searchView)
+                    viewModel.setSearchText(query)
+                    observeSearchUser(viewModel)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    //viewModel.setSearchView(searchView)
+                    //viewModel.setSearchText(newText)
+                    return true
+                }
+            })
         }
     }
 

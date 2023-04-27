@@ -1,29 +1,20 @@
 package com.listgithubusersinglescreen.ui.main
 
-import android.app.SearchManager
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.getSystemService
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.databinding.ActivityMainBinding
 import com.listgithubusersinglescreen.helper.ListTheme
-import com.listgithubusersinglescreen.ui.home.HomeFragment
-import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val mainViewModel by viewModel<MainViewModel>()
-    private val homeViewModel by viewModel<HomeViewModel>()
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private var _navHostFragment: NavHostFragment? = null
@@ -60,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun onBack() {
+    fun onBack() {
         navHostFragment.findNavController().let {
             if (it.currentDestination?.id == R.id.homeFragment) {
                 finish()
@@ -93,76 +84,6 @@ class MainActivity : AppCompatActivity() {
                 is ListTheme.NIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 is ListTheme.UNKNOWN -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        navHostFragment.findNavController()
-            .addOnDestinationChangedListener { _, destination, _ -> // navController, destination, bundle
-                binding.mToolbar.let {
-                    when (destination.id) {
-                        // there isn't configure menu for SplashFragment and SettingsFragment
-                        R.id.homeFragment -> {
-                            menuInflater.inflate(R.menu.main_menu, menu)
-                            searchView(menu!!)
-                        }
-                    }
-                }
-            }
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    private fun searchView(menu: Menu) {
-        val searchManager = getSystemService<SearchManager>()
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
-
-        searchView.apply {
-            setIconifiedByDefault(false)
-            setSearchableInfo(searchManager?.getSearchableInfo(componentName))
-            queryHint = resources.getString(R.string.search_hint)
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    searchView.clearFocus()
-                    homeViewModel.setSearchView(searchView)
-                    homeViewModel.setSearchText(query)
-                    (navHostFragment.childFragmentManager.fragments[0] as HomeFragment)
-                        .observeSearchUser(homeViewModel)
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    homeViewModel.setSearchView(searchView)
-                    homeViewModel.setSearchText(newText)
-                    return true
-                }
-            })
-        }
-    }
-
-    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            android.R.id.home -> {
-                onBack()
-                true
-            }
-
-            R.id.love -> {
-                Toast.makeText(this@MainActivity, "love list", Toast.LENGTH_SHORT).show()
-                true
-            }
-
-            R.id.setting -> {
-                navHostFragment.findNavController()
-                    .navigate(R.id.action_homeFragment_to_settingsFragment)
-                true
-            }
-
-            R.id.share -> {
-                Toast.makeText(this@MainActivity, "share", Toast.LENGTH_SHORT).show()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(menuItem)
         }
     }
 

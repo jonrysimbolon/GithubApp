@@ -1,13 +1,19 @@
 package com.listgithubusersinglescreen.ui.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.listgithubusersinglescreen.R
@@ -16,6 +22,7 @@ import com.listgithubusersinglescreen.databinding.FragmentDetailBinding
 import com.listgithubusersinglescreen.helper.FollowType
 import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.ui.adapter.SectionsPagerAdapter
+import com.listgithubusersinglescreen.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DetailFragment : Fragment() {
@@ -44,6 +51,40 @@ class DetailFragment : Fragment() {
         userLogin = bundle.userLogin
 
         observeLoved(viewModel, userNodeId)
+
+        requireActivity().addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.detail_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    android.R.id.home -> {
+                        (requireActivity() as MainActivity).onBack()
+                        true
+                    }
+                    R.id.share -> {
+                        startActivity(
+                            Intent.createChooser(
+                                Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, urlString)
+                                    type = getString(R.string.type_share)
+                                }, getString(R.string.share_to)
+                            )
+                        )
+                        true
+                    }
+                    R.id.setting -> {
+                        findNavController()
+                            .navigate(R.id.action_detailFragment_to_settingsFragment)
+                        true
+                    }
+                    else -> true
+                }
+            }
+        }, viewLifecycleOwner)
 
         viewModel.getUser(userLogin, userNodeId).observe(viewLifecycleOwner) { result ->
             if (result != null) {

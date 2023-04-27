@@ -129,6 +129,11 @@ class UserFollowFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         const val ARG_SECTION_NUMBER = "section_number"
         const val USER = "user"

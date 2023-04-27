@@ -16,6 +16,7 @@ import com.listgithubusersinglescreen.repository.settings.SettingPreferences
 import com.listgithubusersinglescreen.repository.user.UserRepository
 import com.listgithubusersinglescreen.repository.user.UserRepositoryImpl
 import com.listgithubusersinglescreen.ui.detail.DetailViewModel
+import com.listgithubusersinglescreen.ui.favorite.FavoriteViewModel
 import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import com.listgithubusersinglescreen.ui.main.MainViewModel
 import com.listgithubusersinglescreen.ui.settings.SettingsViewModel
@@ -114,6 +115,10 @@ val appModule = module {
 
     viewModel {
         UserFollowViewModel(get())
+    }
+
+    viewModel {
+        FavoriteViewModel(get())
     }
 
 }

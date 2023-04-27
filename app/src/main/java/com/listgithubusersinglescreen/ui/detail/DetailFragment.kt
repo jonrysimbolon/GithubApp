@@ -2,7 +2,6 @@ package com.listgithubusersinglescreen.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -119,7 +118,6 @@ class DetailFragment : Fragment() {
 
     private fun observeLoved(viewModel: DetailViewModel, userNodeId: String) {
         viewModel.isLovedUser(userNodeId).observe(viewLifecycleOwner) {
-            Log.e("DetailActivity", "observe it :$it")
             isLoved = it
             if (it) {
                 binding.favBtn.setImageResource(R.drawable.ic_love_active_white_24)

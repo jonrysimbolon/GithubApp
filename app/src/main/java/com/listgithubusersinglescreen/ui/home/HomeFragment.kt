@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.getSystemService
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +22,6 @@ import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.databinding.FragmentHomeBinding
 import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.ui.adapter.MainAdapter
-import com.listgithubusersinglescreen.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -55,6 +55,11 @@ class HomeFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
+                    R.id.love -> {
+                        findNavController()
+                            .navigate(R.id.action_homeFragment_to_favoriteFragment)
+                        true
+                    }
                     R.id.setting -> {
                         findNavController()
                             .navigate(R.id.action_homeFragment_to_settingsFragment)
@@ -63,7 +68,7 @@ class HomeFragment : Fragment() {
                     else -> true
                 }
             }
-        }, viewLifecycleOwner)
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         binding.srlMain.setOnRefreshListener {
             observeFreshUser(viewModel)

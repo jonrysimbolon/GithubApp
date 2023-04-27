@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
@@ -50,10 +51,10 @@ class DetailFragment : Fragment() {
         userNodeId = bundle.userNodeId
         userLogin = bundle.userLogin
 
+        requireActivity().title = userLogin
+
         observeLoved(viewModel, userNodeId)
-
         requireActivity().addMenuProvider(object : MenuProvider {
-
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.detail_menu, menu)
             }
@@ -84,7 +85,7 @@ class DetailFragment : Fragment() {
                     else -> true
                 }
             }
-        }, viewLifecycleOwner)
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewModel.getUser(userLogin, userNodeId).observe(viewLifecycleOwner) { result ->
             if (result != null) {
@@ -103,7 +104,7 @@ class DetailFragment : Fragment() {
                         showLoading(false)
                         showFailedComponent(true)
                         Toast.makeText(
-                            requireActivity(), "Terjadi kesalahan" + result.error, Toast.LENGTH_SHORT
+                            requireActivity(), getString(R.string.terjadi_kesalahan) + result.error, Toast.LENGTH_SHORT
                         ).show()
                     }
                 }

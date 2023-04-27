@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.listgithubusersinglescreen.BuildConfig
@@ -37,7 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     else -> true
                 }
             }
-        }, viewLifecycleOwner)
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

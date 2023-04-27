@@ -30,12 +30,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleAllFragmentBehaviour() {
-        // manage toolbar on action bar
-        setSupportActionBar(binding.mToolbar)
         // manage all fragment on anything case
         navHostFragment.findNavController().addOnDestinationChangedListener { _, destination, _ ->
+            title = destination.label
             setTheme()
-            mainViewModel.clearAndSetTitle(binding.mToolbar, destination)
             configureActionBar(destination)
             configureUpButton(destination)
         }

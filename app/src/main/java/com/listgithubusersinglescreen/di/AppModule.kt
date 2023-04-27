@@ -19,7 +19,7 @@ import com.listgithubusersinglescreen.ui.detail.DetailViewModel
 import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import com.listgithubusersinglescreen.ui.main.MainViewModel
 import com.listgithubusersinglescreen.ui.settings.SettingsViewModel
-import com.listgithubusersinglescreen.ui.userfollow.UserFollowViewModel
+import com.listgithubusersinglescreen.ui.follow.UserFollowViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext

@@ -15,7 +15,7 @@ interface UserDao {
     fun getUsers(): LiveData<List<UserEntity>>
 
     @Query("SELECT * FROM ${BuildConfig.USER_TBL_NEW} where login like '%' || :login || '%'")
-    fun getUserSearch(login: String): LiveData<List<UserEntity>>
+    suspend fun getUserSearch(login: String): List<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUsers(user: List<UserEntity>)
@@ -33,7 +33,7 @@ interface UserDao {
     suspend fun updateLoveUser(nodeId: String, stateLove: Boolean)
 
     @Query("DELETE FROM ${BuildConfig.USER_TBL_NEW} WHERE loved = 0")
-    suspend fun deleteAllFromFavorite()
+    suspend fun deleteUsersExceptFav()
 
     @Query("SELECT nodeId FROM ${BuildConfig.USER_TBL_NEW} where loved = 1")
     suspend fun getLovedNodeId(): List<String>

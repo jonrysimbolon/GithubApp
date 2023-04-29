@@ -10,11 +10,13 @@ import androidx.navigation.fragment.findNavController
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.databinding.ActivityMainBinding
 import com.listgithubusersinglescreen.helper.ListTheme
+import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val mainViewModel by viewModel<MainViewModel>()
+    private val homeViewModel by viewModel<HomeViewModel>()
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private var _navHostFragment: NavHostFragment? = null
@@ -52,7 +54,14 @@ class MainActivity : AppCompatActivity() {
     fun onBack() {
         navHostFragment.findNavController().let {
             if (it.currentDestination?.id == R.id.homeFragment) {
-                finish()
+                if(homeViewModel.isSearch.value == true){
+                    println("is search main nya true")
+                    homeViewModel.isSearch.value = false
+                    homeViewModel.getFreshUser()
+                }else{
+                    println("is search main nya false")
+                    finish()
+                }
             } else {
                 it.popBackStack()
             }

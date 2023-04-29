@@ -1,32 +1,56 @@
 package com.listgithubusersinglescreen.ui.home
 
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.listgithubusersinglescreen.data.local.entity.UserEntity
+import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.repository.user.UserRepository
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    var isSearch = MutableLiveData(false)
+
     private val _searchText = MutableLiveData<String>()
     val searchText: LiveData<String>
         get() = _searchText
 
-    private val _searchView = MutableLiveData<SearchView>()
 
-    val searchView: LiveData<SearchView>
-        get() = _searchView
+    private val _users: LiveData<ResultStatus<List<UserEntity>>> = userRepository.getUsers()
+    val users: LiveData<ResultStatus<List<UserEntity>>>
+        get() = _users
 
-    fun setSearchText(text: String) {
+
+    private var _searchUsers: MutableLiveData<ResultStatus<List<UserEntity>>> = MutableLiveData()
+    val searchUsers: LiveData<ResultStatus<List<UserEntity>>>
+        get() = _searchUsers
+
+
+    fun getSearchUser(login: String){
+        viewModelScope.launch {
+            _searchUsers.value = ResultStatus.Loading
+            try {
+                val userSearchList = userRepository.getSearchUsers(login)
+                _searchUsers.value = ResultStatus.Success(userSearchList)
+            }catch (e: Exception){
+                e.printStackTrace()
+                _searchUsers.value = ResultStatus.Error(e.message.toString())
+            }
+        }
+    }
+
+    fun getFreshUser(){
+        if(_users.value == null){
+            userRepository.getUsers()
+        }
+    }
+
+    fun setSearchText(text: String){
         _searchText.value = text
     }
 
-    fun setSearchView(searchView: SearchView){
-        _searchView.value = searchView
-    }
-
-    fun getFreshUser() = userRepository.getUsers(null)
-    fun getSearchUser(login: String) = userRepository.getUsers(login)
 }

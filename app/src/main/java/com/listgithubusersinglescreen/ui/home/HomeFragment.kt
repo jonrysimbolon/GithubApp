@@ -45,7 +45,11 @@ class HomeFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvUsers.layoutManager = layoutManager
 
-        observeFreshUser(viewModel)
+        // prevent get new data when configuration changed like rotate
+        if(savedInstanceState === null){
+            viewModel.getFreshUser()
+        }
+
         requireActivity().addMenuProvider(object : MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -71,26 +75,55 @@ class HomeFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         binding.srlMain.setOnRefreshListener {
-            observeFreshUser(viewModel)
+            viewModel.getFreshUser()
         }
 
         binding.reloadBtn.setOnClickListener {
-            observeFreshUser(viewModel)
+            viewModel.getFreshUser()
         }
 
-        viewModel.searchText.observe(requireActivity()) { text ->
-            viewModel.searchView.value?.apply {
-                setQuery(text, false)
-                setIconifiedByDefault(false)
-                isIconified = false
+        /*viewModel.searchText.observe(viewLifecycleOwner){ text ->
+            // we just get searchView object and then pass this `text` to searchView text
+            // open searchView area
+            Toast.makeText(requireActivity(), text, Toast.LENGTH_SHORT).show()
+        }*/
+
+        viewModel.searchUsers.observe(viewLifecycleOwner) { result ->
+            if(viewModel.isSearch.value == true){
+                println("is search from home is true")
+            }else{
+                println("is search from home is false")
             }
         }
-    }
 
-    private fun showFailedComponent(isFailure: Boolean) {
-        binding.apply {
-            errorImg.visibility = if (isFailure) View.VISIBLE else View.GONE
-            reloadBtn.visibility = if (isFailure) View.VISIBLE else View.GONE
+        viewModel.users.observe(viewLifecycleOwner) { result ->
+            if(viewModel.isSearch.value == false){
+                if (result != null) {
+                    when (result) {
+                        is ResultStatus.Loading -> {
+                            showLoading(true)
+                            showFailedComponent(false)
+                        }
+
+                        is ResultStatus.Success -> {
+                            showLoading(false)
+                            showFailedComponent(false)
+                            val userData = result.data
+                            setUsersData(userData)
+                        }
+
+                        is ResultStatus.Error -> {
+                            showLoading(false)
+                            showFailedComponent(true)
+                            Toast.makeText(
+                                requireActivity(),
+                                getString(R.string.failed_desc) + result.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -105,18 +138,23 @@ class HomeFragment : Fragment() {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     searchView.clearFocus()
-                    viewModel.setSearchView(searchView)
                     viewModel.setSearchText(query)
-                    observeSearchUser(viewModel)
+                    viewModel.getSearchUser(query)
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    //viewModel.setSearchView(searchView)
-                    //viewModel.setSearchText(newText)
+                    viewModel.setSearchText(newText)
                     return true
                 }
             })
+        }
+    }
+
+    private fun showFailedComponent(isFailure: Boolean) {
+        binding.apply {
+            errorImg.visibility = if (isFailure) View.VISIBLE else View.GONE
+            reloadBtn.visibility = if (isFailure) View.VISIBLE else View.GONE
         }
     }
 
@@ -157,67 +195,6 @@ class HomeFragment : Fragment() {
             it.setListUsers(usersData)
         }
         binding.rvUsers.adapter = adapter
-    }
-
-    private fun observeFreshUser(viewModel: HomeViewModel) {
-        viewModel.getFreshUser().observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultStatus.Loading -> {
-                        showLoading(true)
-                        showFailedComponent(false)
-                    }
-
-                    is ResultStatus.Success -> {
-                        showLoading(false)
-                        showFailedComponent(false)
-                        val userData = result.data
-                        setUsersData(userData)
-                    }
-
-                    is ResultStatus.Error -> {
-                        showLoading(false)
-                        showFailedComponent(true)
-                        Toast.makeText(
-                            requireActivity(),
-                            getString(R.string.failed_desc) + result.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
-    }
-
-    fun observeSearchUser(viewModel: HomeViewModel) {
-        viewModel.getSearchUser(viewModel.searchText.value ?: "")
-            .observe(viewLifecycleOwner) { result ->
-                if (result != null) {
-                    when (result) {
-                        is ResultStatus.Loading -> {
-                            showLoading(true)
-                            showFailedComponent(false)
-                        }
-
-                        is ResultStatus.Success -> {
-                            showLoading(false)
-                            showFailedComponent(false)
-                            val userData = result.data
-                            setUsersData(userData)
-                        }
-
-                        is ResultStatus.Error -> {
-                            showLoading(false)
-                            showFailedComponent(true)
-                            Toast.makeText(
-                                requireActivity(),
-                                getString(R.string.failed_desc) + result.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
     }
 
     override fun onDestroyView() {

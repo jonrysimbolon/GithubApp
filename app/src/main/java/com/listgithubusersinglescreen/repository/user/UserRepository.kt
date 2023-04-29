@@ -9,5 +9,6 @@ interface UserRepository {
     suspend fun setLovedUser(nodeId: String, lovedState: Boolean)
     fun isLovedUser(nodeId: String): LiveData<Boolean>
     fun getUser(login: String, nodeId: String): LiveData<ResultStatus<UserEntity>>
-    fun getUsers(login: String?): LiveData<ResultStatus<List<UserEntity>>>
+    fun getUsers(): LiveData<ResultStatus<List<UserEntity>>>
+    suspend fun getSearchUsers(login: String): List<UserEntity>
 }

@@ -7,10 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.listgithubusersinglescreen.BuildConfig
 import com.listgithubusersinglescreen.data.local.room.db.GithubListUserDatabase
-import com.listgithubusersinglescreen.data.local.room.db.migration
 import com.listgithubusersinglescreen.data.remote.retrofit.ApiService
-import com.listgithubusersinglescreen.repository.follow.FollowRepository
-import com.listgithubusersinglescreen.repository.follow.FollowRepositoryImpl
 import com.listgithubusersinglescreen.repository.settings.PreferencesParent
 import com.listgithubusersinglescreen.repository.settings.SettingPreferences
 import com.listgithubusersinglescreen.repository.user.UserRepository
@@ -19,7 +16,6 @@ import com.listgithubusersinglescreen.ui.detail.DetailViewModel
 import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import com.listgithubusersinglescreen.ui.main.MainViewModel
 import com.listgithubusersinglescreen.ui.settings.SettingsViewModel
-import com.listgithubusersinglescreen.ui.userfollow.UserFollowViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -68,16 +64,11 @@ val appModule = module {
             GithubListUserDatabase::class.java,
             BuildConfig.USER_DB
         )
-            .addMigrations(migration)
             .build()
     }
 
     single {
         get<GithubListUserDatabase>().userDao()
-    }
-
-    single {
-        get<GithubListUserDatabase>().followDao()
     }
 
     single {
@@ -90,10 +81,6 @@ val appModule = module {
 
     single<UserRepository> {
         UserRepositoryImpl(get(), get())
-    }
-
-    single<FollowRepository> {
-        FollowRepositoryImpl(get(), get())
     }
 
     viewModel {
@@ -110,10 +97,6 @@ val appModule = module {
 
     viewModel {
         DetailViewModel(get())
-    }
-
-    viewModel {
-        UserFollowViewModel(get())
     }
 
 }

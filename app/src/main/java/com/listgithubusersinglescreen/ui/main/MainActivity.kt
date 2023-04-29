@@ -123,7 +123,6 @@ class MainActivity : AppCompatActivity() {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     searchView.clearFocus()
-                    homeViewModel.setSearchView(searchView)
                     homeViewModel.setSearchText(query)
                     (navHostFragment.childFragmentManager.fragments[0] as HomeFragment)
                         .observeSearchUser(homeViewModel)
@@ -131,7 +130,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    homeViewModel.setSearchView(searchView)
                     homeViewModel.setSearchText(newText)
                     return true
                 }

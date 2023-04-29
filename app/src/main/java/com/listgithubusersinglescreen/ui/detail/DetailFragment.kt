@@ -6,16 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayoutMediator
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.databinding.FragmentDetailBinding
-import com.listgithubusersinglescreen.helper.FollowType
 import com.listgithubusersinglescreen.helper.ResultStatus
-import com.listgithubusersinglescreen.ui.adapter.SectionsPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DetailFragment : Fragment() {
@@ -94,25 +90,6 @@ class DetailFragment : Fragment() {
             Glide.with(requireActivity())
                 .load(user.avatarUrl)
                 .into(detPhotoUser)
-
-            val sectionsPagerAdapter = SectionsPagerAdapter(
-                (requireActivity() as AppCompatActivity),
-                userLogin,
-                userNodeId
-            )
-            viewPager.adapter = sectionsPagerAdapter
-            TabLayoutMediator(tabs, viewPager) { tab, position ->
-                when (position) {
-                    0 -> {
-                        tab.text =
-                            FollowType.Follower.name + " (" + user.followers + ")"
-                    }
-                    1 -> {
-                        tab.text =
-                            FollowType.Following.name + " (" + user.following + ")"
-                    }
-                }
-            }.attach()
         }
     }
 

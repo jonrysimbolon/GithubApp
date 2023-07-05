@@ -52,5 +52,4 @@ class HomeViewModel(
     fun setSearchText(text: String){
         _searchText.value = text
     }
-
 }

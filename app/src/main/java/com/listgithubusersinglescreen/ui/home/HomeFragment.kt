@@ -2,19 +2,15 @@ package com.listgithubusersinglescreen.ui.home
 
 import android.app.SearchManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.getSystemService
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,14 +19,11 @@ import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.databinding.FragmentHomeBinding
 import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.ui.adapter.MainAdapter
-import com.listgithubusersinglescreen.utils.showSnackBarAppearBriefly
-import kotlinx.coroutines.launch
+import com.listgithubusersinglescreen.ui.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
     private val viewModel: HomeViewModel by sharedViewModel()
     private val menuProvider: MenuProvider by lazy {
         object : MenuProvider {
@@ -59,12 +52,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun FragmentHomeBinding.initialize(){}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,7 +108,6 @@ class HomeFragment : Fragment() {
 
     private fun searchConfig(searchManager: SearchManager, searchView: SearchView) {
         searchView.apply {
-            setIconifiedByDefault(true)
             setQuery(viewModel.searchText.value, false)
             setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
             queryHint = resources.getString(R.string.search_hint)
@@ -184,10 +171,5 @@ class HomeFragment : Fragment() {
             it.setListUsers(usersData)
         }
         binding.rvUsers.adapter = adapter
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

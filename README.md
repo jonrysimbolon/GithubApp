@@ -1,6 +1,12 @@
 # ListGithubUserSingleScreen
 
-- splash screen - list user - search user - detail user - favorite user - settings - about me   - single screen - clean code (mvvm, di, remote-local/repository)
+- splash screen
+- list user
+- search user 
+- detail user 
+- favorite user 
+- settings 
+- about me  
 
 # Tech stack
 

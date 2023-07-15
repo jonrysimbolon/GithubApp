@@ -1,5 +1,9 @@
 # ListGithubUserSingleScreen
 
+- splash screen - list user - search user - detail user - favorite user - settings - about me   - single screen - clean code (mvvm, di, remote-local/repository)
+
+# Tech stack
+
 :. One activity with many fragment
 
 :. Use MVVM

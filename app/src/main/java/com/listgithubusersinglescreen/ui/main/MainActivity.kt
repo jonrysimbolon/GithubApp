@@ -1,22 +1,20 @@
 package com.listgithubusersinglescreen.ui.main
 
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.listgithubusersinglescreen.R
 import com.listgithubusersinglescreen.databinding.ActivityMainBinding
 import com.listgithubusersinglescreen.helper.ListTheme
-import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val mainViewModel by viewModel<MainViewModel>()
-    private val homeViewModel by viewModel<HomeViewModel>()
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private var _navHostFragment: NavHostFragment? = null
@@ -28,43 +26,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         _navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
+        setupActionBarWithNavController(navHostFragment.navController)
         handleAllFragmentBehaviour()
+        observeTheme()
     }
 
     private fun handleAllFragmentBehaviour() {
         // manage all fragment on anything case
         navHostFragment.findNavController().addOnDestinationChangedListener { _, destination, _ ->
-            title = destination.label
-            setTheme()
-            configureActionBar(destination)
             configureUpButton(destination)
-        }
-        // manage back button
-        backPressed()
-    }
-
-    private fun backPressed() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onBack()
-            }
-        })
-    }
-
-    fun onBack() {
-        navHostFragment.findNavController().let {
-            if (it.currentDestination?.id == R.id.homeFragment) {
-                if(homeViewModel.isSearch.value == true){
-                    println("is search main nya true")
-                    homeViewModel.isSearch.value = false
-                    homeViewModel.getFreshUser()
-                }else{
-                    println("is search main nya false")
-                    finish()
-                }
-            } else {
-                it.popBackStack()
-            }
+            configureActionBar(destination)
         }
     }
 
@@ -76,6 +47,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onBack() {
+        navHostFragment.findNavController().popBackStack()
+    }
+
     private fun configureActionBar(destination: NavDestination) {
         if (destination.id == R.id.splashFragment) {
             supportActionBar?.hide()
@@ -84,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setTheme() {
+    private fun observeTheme() {
         mainViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
             when (isDarkModeActive) {
                 is ListTheme.DAY -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

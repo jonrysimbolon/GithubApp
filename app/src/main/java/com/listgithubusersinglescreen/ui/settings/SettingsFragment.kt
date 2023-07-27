@@ -60,20 +60,26 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
+        println("key : $key")
         if (key == BuildConfig.NOT_USE_SYSTEM) {
             val notUseSystemTheme = sharedPreferences.getBoolean(BuildConfig.NOT_USE_SYSTEM, false)
             viewModel.saveNotUseThemeSetting(notUseSystemTheme)
+            if(notUseSystemTheme) {
+                setLightDarkTheme(false)
+            }
         }
-
         if (key == BuildConfig.THEME_SETTINGS) {
             val themeValue = sharedPreferences.getBoolean(BuildConfig.THEME_SETTINGS, false)
-            viewModel.saveThemeSetting(
-                when (themeValue) {
-                    true -> ListTheme.NIGHT
-                    false -> ListTheme.DAY
-                }
-            )
+            setLightDarkTheme(themeValue)
         }
     }
 
+    private fun setLightDarkTheme(isDark: Boolean){
+        viewModel.saveThemeSetting(
+            when (isDark) {
+                true -> ListTheme.NIGHT
+                false -> ListTheme.DAY
+            }
+        )
+    }
 }

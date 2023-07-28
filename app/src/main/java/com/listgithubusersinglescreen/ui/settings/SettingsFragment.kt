@@ -66,6 +66,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
             viewModel.saveNotUseThemeSetting(notUseSystemTheme)
             if(notUseSystemTheme) {
                 setLightDarkTheme(false)
+            }else{
+                themeSettingPreference.isChecked = false
             }
         }
         if (key == BuildConfig.THEME_SETTINGS) {
@@ -75,6 +77,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     private fun setLightDarkTheme(isDark: Boolean){
+        themeSettingPreference.isChecked = isDark
         viewModel.saveThemeSetting(
             when (isDark) {
                 true -> ListTheme.NIGHT

@@ -1,0 +1,14 @@
+plugins {
+    id 'com.android.dynamic-feature'
+    id 'org.jetbrains.kotlin.android'
+}
+
+apply from: '../common.gradle'
+
+android {
+    namespace 'com.jonrysimbolon.settings'
+}
+
+dependencies {
+    api project(":app")
+}

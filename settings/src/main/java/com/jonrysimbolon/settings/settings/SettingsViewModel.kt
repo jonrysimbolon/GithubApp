@@ -1,4 +1,4 @@
-package com.listgithubusersinglescreen.ui.settings
+package com.jonrysimbolon.settings.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

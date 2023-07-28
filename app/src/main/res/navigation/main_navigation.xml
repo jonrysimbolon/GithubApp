@@ -52,8 +52,13 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.listgithubusersinglescreen.ui.settings.SettingsFragment"
+        android:name="com.jonrysimbolon.settings.settings.SettingsFragment"
+        app:moduleName="settings"
         android:label="Settings" />
+    <!--<include-dynamic
+        android:id="@+id/settingsFragment"
+        android:name="com.jonrysimbolon.settings.settings.SettingsFragment"
+        android:label="Settings" />-->
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.listgithubusersinglescreen.ui.detail.DetailFragment"

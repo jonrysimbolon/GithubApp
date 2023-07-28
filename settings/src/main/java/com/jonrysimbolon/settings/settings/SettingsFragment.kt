@@ -1,4 +1,4 @@
-package com.listgithubusersinglescreen.ui.settings
+package com.jonrysimbolon.settings.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,8 +10,9 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.listgithubusersinglescreen.BuildConfig
-import com.listgithubusersinglescreen.R
+import com.jonrysimbolon.settings.BuildConfig
+import com.jonrysimbolon.settings.R
+import com.jonrysimbolon.settings.settings.di.injectFeatures
 import com.listgithubusersinglescreen.helper.ListTheme
 import com.listgithubusersinglescreen.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -22,6 +23,11 @@ class SettingsFragment : PreferenceFragmentCompat(),
     private val viewModel: SettingsViewModel by sharedViewModel()
     private lateinit var notUseSystemPreference: SwitchPreferenceCompat
     private lateinit var themeSettingPreference: SwitchPreferenceCompat
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injectFeatures()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -20,7 +20,8 @@ import com.listgithubusersinglescreen.ui.favorite.FavoriteViewModel
 import com.listgithubusersinglescreen.ui.follow.UserFollowViewModel
 import com.listgithubusersinglescreen.ui.home.HomeViewModel
 import com.listgithubusersinglescreen.ui.main.MainViewModel
-import com.listgithubusersinglescreen.ui.settings.SettingsViewModel
+import com.listgithubusersinglescreen.utils.DefaultDispatcherProvider
+import com.listgithubusersinglescreen.utils.DispatcherProvider
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -81,14 +82,6 @@ val appModule = module {
         get<GithubListUserDatabase>().followDao()
     }
 
-    single {
-        androidContext().dataStore
-    }
-
-    single<PreferencesParent> {
-        SettingPreferences(get())
-    }
-
     single<UserRepository> {
         UserRepositoryImpl(get(), get())
     }
@@ -97,16 +90,24 @@ val appModule = module {
         FollowRepositoryImpl(get(), get())
     }
 
+    single<DispatcherProvider> {
+        DefaultDispatcherProvider()
+    }
+
+    single {
+        androidContext().dataStore
+    }
+
+    single<PreferencesParent> {
+        SettingPreferences(get())
+    }
+
     viewModel {
-        HomeViewModel(get())
+        HomeViewModel(get(), get())
     }
 
     viewModel {
         MainViewModel(get())
-    }
-
-    viewModel {
-        SettingsViewModel(get())
     }
 
     viewModel {

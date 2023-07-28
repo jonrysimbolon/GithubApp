@@ -1,0 +1,48 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.newDataInputStream())
+}
+
+android {
+    compileSdk 34
+    defaultConfig {
+        minSdk 22
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "KEY", localProperties['api.key'])
+
+        buildConfigField("String", "USER_DB", '"User.db"')
+
+        buildConfigField("String", "USER_TBL_OLD", '"user_tbl"')
+        buildConfigField("String", "USER_TBL_NEW", '"user_01_tbl"')
+
+        buildConfigField("String", "FOLLOW_TBL_OLD", '""')
+        buildConfigField("String", "FOLLOW_TBL_NEW", '"follow_tbl"')
+
+        buildConfigField("String", "SETTINGS_PREF", '"settings"')
+        buildConfigField("String", "THEME_SETTINGS", '"theme_setting"')
+        buildConfigField("String", "NOT_USE_SYSTEM", '"not_use_system"')
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}

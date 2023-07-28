@@ -6,113 +6,20 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+apply from: '../common.gradle'
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
+
 if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.newDataInputStream())
 }
 
 android {
     namespace 'com.listgithubusersinglescreen'
-    compileSdk 33
-
     defaultConfig {
         applicationId "com.listgithubusersinglescreen"
-        minSdk 22
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "KEY", localProperties['KEY'])
-
-        buildConfigField("String", "USER_DB", '"User.db"')
-
-        buildConfigField("String", "USER_TBL_OLD", '"user_tbl"')
-        buildConfigField("String", "USER_TBL_NEW", '"user_01_tbl"')
-
-        buildConfigField("String", "FOLLOW_TBL_OLD", '""')
-        buildConfigField("String", "FOLLOW_TBL_NEW", '"follow_tbl"')
-
-        buildConfigField("String", "SETTINGS_PREF", '"settings"')
-        buildConfigField("String", "THEME_SETTINGS", '"theme_setting"')
-        buildConfigField("String", "NOT_USE_SYSTEM", '"not_use_system"')
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-    buildFeatures {
-        viewBinding true
-    }
+    dynamicFeatures = [':settings']
 }
-
-dependencies {
-
-    implementation 'androidx.core:core-ktx:1.10.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.2.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-
-
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:core-ktx:1.5.0'
-    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
-        exclude group: 'org.jetbrains.kotlin'
-    }
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-
-    testImplementation 'org.mockito:mockito-core:4.5.1'
-    testImplementation 'org.mockito:mockito-inline:4.4.0'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    testImplementation 'androidx.arch.core:core-testing:2.2.0'
-
-
-    implementation 'androidx.activity:activity-ktx:1.7.1'
-    implementation 'androidx.fragment:fragment-ktx:1.5.7'
-
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6'
-
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'androidx.datastore:datastore-preferences:1.0.0'
-
-    //room
-    implementation "androidx.room:room-runtime:2.6.0-alpha01"
-    implementation 'androidx.room:room-ktx:2.5.1'
-    kapt "androidx.room:room-compiler:2.6.0-alpha01"
-
-    // Koin
-    implementation 'io.insert-koin:koin-android:3.2.0'
-    implementation 'io.insert-koin:koin-androidx-navigation:3.2.0'
-    implementation 'io.insert-koin:koin-androidx-compose:3.2.0'
-    testImplementation 'io.insert-koin:koin-test-junit4:3.2.0'
-
-}
+apply from: '../dependencies.gradle'

@@ -1,0 +1,61 @@
+dependencies {
+
+    api 'androidx.core:core-ktx:1.10.0'
+    api 'androidx.appcompat:appcompat:1.6.1'
+    api 'com.google.android.material:material:1.8.0'
+    api 'androidx.constraintlayout:constraintlayout:2.1.4'
+    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    api 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    api 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    api 'androidx.preference:preference:1.2.0'
+     testApi 'junit:junit:4.13.2'
+     androidTestApi 'androidx.test.ext:junit:1.1.5'
+     androidTestApi 'androidx.test.espresso:espresso-core:3.5.1'
+
+    api 'com.google.android.material:material:1.8.0'
+    api 'androidx.viewpager2:viewpager2:1.0.0'
+
+
+     androidTestApi 'androidx.test:runner:1.5.2'
+     androidTestApi 'androidx.test:core-ktx:1.5.0'
+     androidTestApi('com.adevinta.android:barista:4.2.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+     androidTestApi 'androidx.test:rules:1.5.0'
+     androidTestApi 'androidx.test.ext:junit:1.1.5'
+
+     testApi 'org.mockito:mockito-core:4.5.1'
+     testApi 'org.mockito:mockito-inline:4.4.0'
+     testApi 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+     testApi 'androidx.arch.core:core-testing:2.2.0'
+
+
+    api 'androidx.activity:activity-ktx:1.7.1'
+    api 'androidx.fragment:fragment-ktx:1.5.7'
+
+    api 'com.github.bumptech.glide:glide:4.15.1'
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+    api 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6'
+
+    api 'de.hdodenhof:circleimageview:3.1.0'
+    api 'androidx.datastore:datastore-preferences:1.0.0'
+
+    //room
+    api "androidx.room:room-runtime:2.6.0-alpha01"
+    api 'androidx.room:room-ktx:2.5.1'
+    kapt "androidx.room:room-compiler:2.6.0-alpha01"
+
+    // Koin
+    api 'io.insert-koin:koin-android:3.2.0'
+    api 'io.insert-koin:koin-androidx-navigation:3.2.0'
+    api 'io.insert-koin:koin-androidx-compose:3.2.0'
+     testApi 'io.insert-koin:koin-test-junit4:3.2.0'
+
+    // Dynamic feature
+    api 'androidx.navigation:navigation-dynamic-features-fragment:2.7.0-beta02'
+
+}

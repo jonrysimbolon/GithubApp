@@ -13,6 +13,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.jonrysimbolon.settings.BuildConfig
 import com.jonrysimbolon.settings.R
 import com.jonrysimbolon.settings.settings.di.injectFeatures
+import com.jonrysimbolon.settings.settings.di.unInjectFeature
 import com.listgithubusersinglescreen.helper.ListTheme
 import com.listgithubusersinglescreen.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -90,5 +91,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 false -> ListTheme.DAY
             }
         )
+    }
+
+    override fun onDestroy() {
+        unInjectFeature()
+        super.onDestroy()
     }
 }

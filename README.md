@@ -1,4 +1,4 @@
-# ListGithubUserSingleScreen
+# GithubApp
 
 - splash screen
 - list user

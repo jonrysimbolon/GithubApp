@@ -31,6 +31,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = BuildConfig.SETTINGS_PREF)
+// if `heavyweight property delegation` show, see this ->
+// https://github.com/Miha-x64/Mikes_IDEA_extensions/blob/master/src/main/resources/inspectionDescriptions/ktPropBy.html
 
 private val loggingInterceptor = with(HttpLoggingInterceptor()) {
     if (BuildConfig.DEBUG) {

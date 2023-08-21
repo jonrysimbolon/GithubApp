@@ -8,6 +8,8 @@ import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.data.local.room.UserDao
 import com.listgithubusersinglescreen.data.remote.retrofit.ApiService
 import com.listgithubusersinglescreen.helper.ResultStatus
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class UserRepositoryImpl constructor(
     private val remoteDataSource: ApiService,
@@ -84,12 +86,6 @@ class UserRepositoryImpl constructor(
         }
 
     override suspend fun getSearchUsers(login: String): List<UserEntity> {
-        // TODO: get search list from local
-        // TODO: if empty...
-        // TODO: ...search from server
-        // TODO: if server get data
-        // TODO: store to local
-
         val response = remoteDataSource.searchUser(login).items
         val listExistNodeId = localDataSource.getLovedNodeId()
         val userList = response.map { user ->
@@ -112,16 +108,8 @@ class UserRepositoryImpl constructor(
         return localDataSource.getUserSearch(login)
     }
 
-    override fun getUsers(): LiveData<ResultStatus<List<UserEntity>>> =
-        
-        // TODO: get list from local
-        // TODO: if empty...
-        // TODO: ...get from server
-        // TODO: if server get data
-        // TODO: store to local
-
-        liveData {
-            emit(ResultStatus.Loading)
+    override fun getUsers(): Flow<List<UserEntity>> =
+        flow {
             try {
                 val response = remoteDataSource.getUsers()
                 val listExistNodeId = localDataSource.getLovedNodeId()
@@ -143,16 +131,10 @@ class UserRepositoryImpl constructor(
                 localDataSource.deleteUsersExceptFav()
                 localDataSource.insertUsers(userNonFav)
             } catch (e: Exception) {
-                Log.e(
-                    "UserRepository",
-                    "freshUser : ${e.message.toString()}"
-                )
-                emit(ResultStatus.Error(e.message.toString()))
+                e.printStackTrace()
+                Log.e(UserRepositoryImpl::class.java.simpleName, e.message.toString())
             }
-            val localData: LiveData<ResultStatus<List<UserEntity>>> =
-                localDataSource.getUsers().map {
-                    ResultStatus.Success(it)
-                }
-            emitSource(localData)
+
+            emit(localDataSource.getUsers())
         }
 }

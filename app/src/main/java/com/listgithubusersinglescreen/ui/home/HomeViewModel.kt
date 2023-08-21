@@ -7,10 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.listgithubusersinglescreen.data.local.entity.UserEntity
 import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.repository.user.UserRepository
+import com.listgithubusersinglescreen.utils.DispatcherProvider
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
     var isSearch = MutableLiveData(false)
@@ -20,15 +26,14 @@ class HomeViewModel(
         get() = _searchText
 
 
-    private val _users: LiveData<ResultStatus<List<UserEntity>>> = userRepository.getUsers()
-    val users: LiveData<ResultStatus<List<UserEntity>>>
+    private val _users = MutableStateFlow<ResultStatus<List<UserEntity>>>(ResultStatus.Loading)
+    val users: StateFlow<ResultStatus<List<UserEntity>>>
         get() = _users
 
 
     private var _searchUsers: MutableLiveData<ResultStatus<List<UserEntity>>> = MutableLiveData()
     val searchUsers: LiveData<ResultStatus<List<UserEntity>>>
         get() = _searchUsers
-
 
     fun getSearchUser(login: String){
         viewModelScope.launch {
@@ -44,8 +49,16 @@ class HomeViewModel(
     }
 
     fun getFreshUser(){
-        if(_users.value == null){
+        viewModelScope.launch {
+            _users.value = ResultStatus.Loading
             userRepository.getUsers()
+                .flowOn(dispatcherProvider.io)
+                .catch { e ->
+                    _users.value = ResultStatus.Error(e.message.toString())
+                }
+                .collect { result ->
+                    _users.value = ResultStatus.Success(result)
+                }
         }
     }
 

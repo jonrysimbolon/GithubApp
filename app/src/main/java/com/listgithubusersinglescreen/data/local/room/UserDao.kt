@@ -12,7 +12,7 @@ interface UserDao {
     fun getUser(nodeId: String): LiveData<UserEntity>
 
     @Query("SELECT * FROM ${BuildConfig.USER_TBL_NEW}")
-    fun getUsers(): LiveData<List<UserEntity>>
+    suspend fun getUsers(): List<UserEntity>
 
     @Query("SELECT * FROM ${BuildConfig.USER_TBL_NEW} where login like '%' || :login || '%'")
     suspend fun getUserSearch(login: String): List<UserEntity>

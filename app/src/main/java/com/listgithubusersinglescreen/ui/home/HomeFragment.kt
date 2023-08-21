@@ -11,6 +11,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.getSystemService
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,7 @@ import com.listgithubusersinglescreen.databinding.FragmentHomeBinding
 import com.listgithubusersinglescreen.helper.ResultStatus
 import com.listgithubusersinglescreen.ui.adapter.MainAdapter
 import com.listgithubusersinglescreen.ui.base.BaseFragment
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -52,7 +55,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    override fun FragmentHomeBinding.initialize(){}
+    override fun FragmentHomeBinding.initialize() {}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,9 +78,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             viewModel.getFreshUser()
         }
 
-        viewModel.users.observe(viewLifecycleOwner) { result ->
-            if (viewModel.isSearch.value == false) {
-                if (result != null) {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.users.collect { result ->
                     when (result) {
                         is ResultStatus.Loading -> {
                             showLoading(true)

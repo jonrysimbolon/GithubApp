@@ -7,7 +7,7 @@
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom"
-        app:iconifiedByDefault="true"/>
+        app:iconifiedByDefault="false"/>
     <item
         android:id="@+id/love"
         android:icon="@drawable/ic_love_active_white_24"

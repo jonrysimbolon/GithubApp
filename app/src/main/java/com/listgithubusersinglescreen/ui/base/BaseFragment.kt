@@ -11,7 +11,7 @@ open class BaseFragment<T: ViewBinding>(
     private val inflateMethod: (LayoutInflater, ViewGroup?, Boolean) -> T
 ): Fragment() {
     private var _binding: T? = null
-    val binding get() = _binding!!
+    protected val binding get() = _binding!!
 
     open fun T.initialize(){}
 
